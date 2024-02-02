@@ -5,12 +5,8 @@
 #include <iostream>
 #include <vector>
 
-// x = -50...50
-//|Exp<F>(x) - std::exp(x)|. Найти максимальное отклонение, которое должно быть
-//не больше, чем 10.0*Eps(F)
-
 double Exp(double x){
-    return 1 + x+ x*x/2 + x*x*x/6 + x*x*x*x/24 + x*x*x*x*x/120 + x*x*x*x*x*x/720; //Временная экспонента
+    return 1 + x+ x*x/2 + x*x*x/6 + x*x*x*x/24 + x*x*x*x*x/120 + x*x*x*x*x*x/720;
 }
 
 double my_abs(double a) {
@@ -20,13 +16,15 @@ double my_abs(double a) {
 int main() {
   double max_diff = 0;
 
-  // check int
+
+  std::cout << "Check int:" << '\n';
   for (double i = -50; i <= 50; i++) {
     max_diff = std::max(max_diff, (my_abs(Exp(i) - exp(i))));
-    std::cout << my_abs(Exp(i) - exp(i)) << '\n';
+    std::cout << "Diff: " << my_abs(Exp(i) - exp(i)) << " Pow = " << i <<'\n';
   }
 
   std::cout << '\n';
+  std::cout << "Check float:" << '\n';
 
   std::vector<float> float_arr = {
       1.25,    1.5,   1.75, 2.25,  2.5,    2.75,   -1.25, -1.5,
@@ -36,7 +34,7 @@ int main() {
 
   for (auto k : float_arr) {
     max_diff = std::max(max_diff, (my_abs(Exp(k) - exp(k))));
-    std::cout << my_abs(Exp(k) - exp(k)) << '\n';
+    std::cout << "Diff: " << my_abs(Exp(k) - exp(k)) << " Pow = " << k <<'\n';
   }
 
   std::vector<double> double_arr = {
@@ -46,11 +44,13 @@ int main() {
   };
 
   std::cout << '\n';
+  std::cout << "Check long double" << '\n';
 
   for (auto k : double_arr) {
     max_diff = std::max(max_diff, (my_abs(Exp(k) - exp(k))));
-    std::cout << my_abs(Exp(k) - exp(k)) << '\n';
+    std::cout << "Diff: " << my_abs(Exp(k) - exp(k)) << " Pow = " << k <<'\n';
   }
-
-  std::cout << max_diff;
+  
+  std::cout << '\n';
+  std::cout << "Max diff:" << max_diff;
 }
