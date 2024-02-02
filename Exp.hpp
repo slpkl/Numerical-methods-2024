@@ -30,7 +30,7 @@ constexpr F Exp(F x){
     static_assert(std::is_floating_point_v<F>);
     F y_1; //fractional part
     F y_0; //integer part
-    F y = x / Log2E<F>;
+    F y = x * Log2E<F>;
     y_1 = std::modf(y, &y_0);
     int32_t n;
 
@@ -44,7 +44,7 @@ constexpr F Exp(F x){
         y_0++;
         y_1--;
     }
-
+    
     if(y_0 < INT32_MIN ){
         return 0.0;
     }
@@ -54,14 +54,13 @@ constexpr F Exp(F x){
     else {
         n = static_cast<int>(y_0);
     } 
-    F x_1 = y_1 * Log2E<F>;
-
+    F x_1 = y_1 / Log2E<F>;
     F exp_temp = 0;
     int k = 0;
-    while(true) {
+    while(k < 31) {
         F current_memb = Pow(x_1, k) / static_cast<F>(Factorial(k));
         exp_temp += current_memb;
-        
+
         if(x_1 > 0) {
             F res_error = Sqrt2<F> * Pow(x_1, k + 1) / static_cast<F>(Factorial(n+1));
             if (res_error < 10 * Eps<F>) {
