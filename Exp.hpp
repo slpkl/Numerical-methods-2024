@@ -9,15 +9,6 @@
 namespace ADAAI {
 
 template <typename F>
-constexpr F Pow(F x, int k) {
-    F res = 1;
-    for (int i = 0; i < k; i++) {
-        res *= x;
-    }
-    return res;
-}
-
-template <typename F>
 constexpr F  Exp(F x){
     static_assert(std::is_floating_point_v<F>);
     if(x != x) {
@@ -50,18 +41,21 @@ constexpr F  Exp(F x){
         n = static_cast<int>(y_0);
     }
     F x_1 = y_1 / Log2E<F>;
-    F exp_temp = 1;
+    F exp_temp = 0;
     int k = 1;
 
     F current_memb = 1;
     while(k < 20) {
-        current_memb /= k;
         current_memb *= x_1;
+        current_memb /= k;
+        
         exp_temp += current_memb;
         k++;
     }
 
-    F exp_res = ldexp(exp_temp, n);  
+    F exp_res = ldexpl(exp_temp + 1, n);  
     return exp_res;    
+
     }
+
 }
