@@ -8,6 +8,8 @@
 
 using namespace ADAAI;
 
+int const N = 10;
+
 double my_abs(double a) {
     return (a > 0) ? a : (-1) * a;
 }
@@ -20,7 +22,7 @@ template <typename F>
 void TestFunction(F x) {
     F IdealExp = exp(x);
     F OurExp = Exp(x);
-    F ErrorLimit = std::numeric_limits<F>::epsilon() * 600;
+    F ErrorLimit = std::numeric_limits<F>::epsilon() * N;
     F TypeMetric;
     if (x <= 0) {
         TypeMetric = my_abs(IdealExp - OurExp);
