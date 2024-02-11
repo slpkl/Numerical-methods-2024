@@ -8,14 +8,6 @@
 
 namespace ADAAI {
 
-template <typename F>
-constexpr F Pow(F x, int k) {
-    F res = 1;
-    for (int i = 0; i < k; i++) {
-        res *= x;
-    }
-    return res;
-}
 
 enum class MethodE:int
 {
@@ -24,10 +16,8 @@ enum class MethodE:int
 };
 
 template <MethodE M = MethodE::Pade, typename F>
-//template <typename F>
 constexpr F  Exp(F x){
     static_assert(std::is_floating_point_v<F>);
-    
     if(x != x) {
         return x;
     }
@@ -58,6 +48,7 @@ constexpr F  Exp(F x){
         n = static_cast<int>(y_0);
     }
     F x_1 = y_1 / Log2E<F>;
+
     if constexpr (M==MethodE::Taylor){
         F exp_temp = 1;
         int k = 1;
@@ -71,11 +62,10 @@ constexpr F  Exp(F x){
         }
 
         F exp_res = ldexpl(exp_temp, n);  
-        return exp_res;    
-            
-        }
+        return exp_res;            
+    }
     else if constexpr(M==MethodE::Pade){
-        
+
     }
     }
 }
