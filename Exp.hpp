@@ -54,7 +54,7 @@ constexpr F  Exp(F x){
     int k = 1;
 
     F current_memb = 1;
-    while(k < 35) {
+    while(k < 20) {
         current_memb /= k;
         current_memb *= x_1;
         exp_temp += current_memb;
