@@ -19,7 +19,7 @@ template < typename F >
 constexpr inline F Inf;
 
 template < typename F >
-constexpr inline std::array<F, 7> Polynom;
+constexpr inline std::array<F, 7> Polynom = {0., 0.0, 0., 0., 0., 0., 0.};
 
 template <>
 constexpr inline float Log2E <float> = M_LOG2Ef;
@@ -52,10 +52,10 @@ constexpr inline long double Inf  <long double> = HUGE_VALL;
 
 
 template <>
-constexpr inline std::array<float, 7> Polynom <std::array<float, 7> > = {0.008333333333333333333333333333, 0.1, 0.5, 0., 0., 0., 0.};
+constexpr inline std::array<float, 7> Polynom <std::array<float, 7>> = {0.5, 0.1, 0.008333333333333333333333333333, 0., 0., 0., 0.};
 template <>
 constexpr inline std::array<double, 7> Polynom <std::array<double, 7> > = {0.5, 0.11363636363636363636363636363, 0.01515151515151515151515, 0.001262626262626262626262, 0.0000631313131313131313131313131313131, 0.000001503126503126503126503126503126, 0};
 template <>
-constexpr inline std::array<long double, 7> Polynom <std::array<long double, 7> > = {0.5, 0.1153846153846153846, 0.016025641025641025641, 0.000291375291375291375291375, 0.0000874125874125874125874125, 0.00000323753237532375, 0.0000000578125578125578125};
+constexpr inline std::array<long double, 7> Polynom <std::array<long double, 7> > = {0.5l, 0.1153846153846153846l, 0.016025641025641025641l, 0.000291375291375291375291375l, 0.0000874125874125874125874125l, 0.00000323753237532375, 0.0000000578125578125578125l};
 
 }
