@@ -69,12 +69,12 @@ constexpr F  Exp(F x){
         for (int i = 0; i < 7; i++) {
             current_memb *= x_1;
             
-            numerator += current_memb / Polynom<F>[i];
+            numerator += current_memb * Polynom<std::array<F, 7>>[i];
             if (i % 2 == 0) {
-                denumerator -= current_memb / Polynom<F>[i];
+                denumerator -= current_memb * Polynom<std::array<F, 7>>[i];
             }
             else {
-                denumerator += current_memb / Polynom<F>[i];
+                denumerator += current_memb * Polynom<std::array<F, 7>>[i];
             }
         }
         exp_temp = numerator / denumerator;
