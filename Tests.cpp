@@ -1,16 +1,18 @@
 #include <algorithm>
-#include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <vector>
+
 #include "Consts.hpp"
 #include "Exp.hpp"
 
 using namespace ADAAI;
 
 int const N = 10;
+int const SET_PRECISION = 15;
 
-double my_abs(double a) {
+template <typename F>
+F my_abs(F a) {
     return (a > 0) ? a : (-1) * a;
 }
 
@@ -20,7 +22,7 @@ int unsuccess_count = 0;
 
 template <typename F>
 void TestFunction(F x) {
-    F IdealExp = exp(x);
+    F IdealExp = std::exp(x);
     F OurExp = Exp(x);
     F ErrorLimit = std::numeric_limits<F>::epsilon() * N;
     F TypeMetric;
@@ -34,22 +36,24 @@ void TestFunction(F x) {
         std::cout << "Test Passed!  "
                   << " "
                   << "Pow = " << x << ", "
-                  << "Diff: " << my_abs(IdealExp - OurExp) << '\n';
+                  << std::setprecision(SET_PRECISION) << "Diff: " << TypeMetric << '\n';
         counter++;
         success_count++;
     } else {
         std::cout << "Test Failed!  "
                   << " "
                   << "Pow = " << x << ", "
-                  << "Ideal: " << exp(x) << ", "
+                  << "Ideal: " << std::exp(x) << ", "
                   << "Our: " << Exp(x) << ", "
-                  << "Diff: " << my_abs(IdealExp - OurExp) << '\n';
+                  << std::setprecision(SET_PRECISION) << "Diff: " << TypeMetric << '\n';
         counter++;
         unsuccess_count++;
     }
 }
 
+
 int main() {
+
     std::vector<float> float_arr = {
         1.25,    1.5,   1.75, 2.25,  2.5,    2.75,  -1.25, -1.5,
         -1.75,   -2.25, -2.5, -2.75, -25.5,  -24.5, -23.5, -20.145,
@@ -59,7 +63,7 @@ int main() {
         -10.5, -5.0,  -4.66, -4.5,  -4.27, -3.66, -3.5, -3.2, -2.7,
         -2.56, -2.44, -2.1,  -1.97, -1.5,  -1.06, -0.7, 0.3,  0.4,
         0.5,   0.6,   0.7,   1.1,   2.44,  2.56,  2.7,  3.2,  3.5,
-        3.65,  4.27,  4.5,   466,   5.0,   10.5};
+        3.65,  4.27,  4.5,   4.66,   5.0,   10.5};
 
     std::vector<long double> long_double_arr = {
         1.252525l,   1.55555l,       1.757575l,  2.252525l,  2.5555l,
@@ -89,4 +93,5 @@ int main() {
               << "Succes: " << success_count << '\n'
               << "Failed: " << unsuccess_count << '\n'
               << "All: " << counter << '\n';
+
 }
