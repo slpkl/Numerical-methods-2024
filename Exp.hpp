@@ -5,8 +5,35 @@
 #include <cmath>
 #include <limits>
 
-
 namespace ADAAI {
+
+template <typename F>
+constexpr F Pow(F x, int k)
+{   
+    return (k > 0) ? Pow(x, k-1) * x : 1;
+}
+
+template <typename F>
+constexpr long long Factorial(long long k)
+{   
+    return (k > 1) ? Factorial<F>(k-1) * k : 1;
+}
+
+template <typename F>
+constexpr inline F TaylorLHS(int k)
+{
+    return (Sqrt2<F>  * Pow(1.0l / Log2E<F> / 2.0l, k) / Factorial<F>(k+1));
+}
+
+template <typename F>
+static constexpr inline int MkExpTaylorOrder()
+{
+    for(int i = 0; i < 1000; ++i) {
+        if (TaylorLHS<F>(i) < Eps<F>) {
+            return i - 1;
+        }
+    }
+}
 
 enum class MethodE:int
 {
@@ -15,13 +42,13 @@ enum class MethodE:int
 };
 
 template <MethodE M = MethodE::Pade, typename F>
-//template <typename F>
-constexpr F  Exp(F x){
+constexpr F Exp(F x)
+{
     static_assert(std::is_floating_point_v<F>);
-    
     if(x != x) {
         return x;
     }
+
     F y_1; //fractional part
     F y_0; //integer part
     F y = x * Log2E<F>;
@@ -48,20 +75,21 @@ constexpr F  Exp(F x){
     else {
         n = static_cast<int>(y_0);
     }
+
     F x_1 = y_1 / Log2E<F>;
     F exp_temp = 1;
     if constexpr (M==MethodE::Taylor){
+        constexpr int N = MkExpTaylorOrder<F>();
         int k = 1;
 
         F current_memb = 1;
-        while(k < 20) {
+        while(k <= N) {
             current_memb /= k;
             current_memb *= x_1;
             exp_temp += current_memb;
             k++;
         }
-
-        }
+    }
     else if constexpr(M==MethodE::Pade){
         F numerator = 1;
         F denumerator = 1;
@@ -70,6 +98,7 @@ constexpr F  Exp(F x){
             current_memb *= x_1;
             
             numerator += current_memb * Polynom<std::array<F, 7>>[i];
+            
             if (i % 2 == 0) {
                 denumerator -= current_memb * Polynom<std::array<F, 7>>[i];
             }
