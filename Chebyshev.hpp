@@ -1,11 +1,9 @@
 #ifndef __CHEBYSHEV_H__
 #define __CHEBYSHEV_H__
 
-namespace ADAAI {
 /*
  *  Functions calculate Chebyshev Polynomial Tn(x)
  */
-namespace Chebyshev {
 // Chebyshev Polynomials of the first kind: Tn(x)
 //
 // n = 0
@@ -58,6 +56,5 @@ inline auto Tn(unsigned int n, const T &x) {
 
   return tn;
 }
-}  // namespace Chebyshev
-}  // namespace ADAAI
+
 #endif
