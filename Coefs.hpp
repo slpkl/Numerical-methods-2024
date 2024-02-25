@@ -9,6 +9,8 @@ void Coefs(int N, gsl_vector *c) {
 
   gsl_matrix_set_all(A, 0.0l);
 
+  // Compute vector b
+
   gsl_vector_set_all(b, 0.0l);
 
   gsl_vector_set(b, N, 1.0l);
@@ -17,43 +19,34 @@ void Coefs(int N, gsl_vector *c) {
     gsl_matrix_set(A, k, k, -1.0l);
     for (int n = k + 1; n < N + 1; n++) {
       if (n % 2 == 0) {
-        if (k % 2 != 0) { 
+        if (k % 2 != 0) {
           gsl_matrix_set(A, k, n, static_cast<long double>(2 * n));
         }
-      } 
-      else if (n % 2 == 1) {
+      } else if (n % 2 == 1) {
         if (k == 0) {
           gsl_matrix_set(A, k, n, static_cast<long double>(n));
         } else if (k % 2 == 0) {
           gsl_matrix_set(A, k, n, static_cast<long double>(2 * n));
         }
       }
-      //gsl_matrix_set(A, k, k, -1.0l);
+      // gsl_matrix_set(A, k, k, -1.0l);
     }
   }
 
   // Add Sum_0 ^N c_n * T_n(0) = 1 equality
 
   for (int n = 0; n < N + 1; n++) {
-    // if (n % 2 == 0) {
-    //   if (n % 4 == 0) {
-    //     gsl_matrix_set(A, N, n, static_cast<long double>(1));
-    //   } else {
-    //     gsl_matrix_set(A, N, n, static_cast<long double>(-1));
-    //   }
-    // }
-    int data = Tn(n,0);
+    int data = Tn(n, 0);
     gsl_matrix_set(A, N, n, static_cast<long double>(data));
   }
-//   std::cout << "Matrix:" << std::endl;
-//     for (int i = 0; i < N + 1; i++) {
-//         for (int j = 0; j < N + 1; j++) {
-//             std::cout << gsl_matrix_get(A, i, j) << "\t";
-//         }
-//         std::cout << std::endl;
-//     }
 
+  // This function solves the system Ax = b directly using Householder
+  // transformations. On output the solution is stored in x and b is not
+  // modified. The matrix A is destroyed by the Householder transformations.
 
+  // where gsl_matrix A contains double data
+
+  // That is why required accuracy can not be reached for long double type x
   gsl_linalg_HH_solve(A, b, c);
 
   gsl_matrix_free(A);
