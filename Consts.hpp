@@ -3,6 +3,8 @@
 #include <type_traits>
 #include <cfloat>
 
+#define _USE_MATH_DEFINES
+
 namespace ADAAI {
 
 template < typename F >
@@ -16,6 +18,12 @@ constexpr inline F Sqrt2;
 
 template < typename F >
 constexpr inline F Inf;
+
+template < typename F >
+constexpr inline F Pi;
+
+template < typename F >
+constexpr inline F M_2_Pi;
 
 template <>
 constexpr inline float Log2E <float> = M_LOG2Ef;
@@ -44,5 +52,19 @@ template <>
 constexpr inline double Inf <double> = HUGE_VAL;
 template <>
 constexpr inline long double Inf  <long double> = HUGE_VALL;
+
+template <>
+constexpr inline float Pi <float> = M_PIf;
+template <>
+constexpr inline double Pi <double> = M_PI;
+template <>
+constexpr inline long double Pi  <long double> = M_PIl;
+
+template <>
+constexpr inline float M_2_Pi <float> = M_2_PIf;
+template <>
+constexpr inline double M_2_Pi <double> = M_2_PI;
+template <>
+constexpr inline long double M_2_Pi  <long double> = M_2_PIl;
 
 }
