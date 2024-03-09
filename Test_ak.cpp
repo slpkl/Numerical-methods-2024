@@ -1,7 +1,6 @@
 #include "Consts.hpp"
 #include "Numerical_coeffs.hpp"
 #include "Chebyshev.hpp"
-#include "ak.hpp"
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -10,11 +9,21 @@
 
 using namespace ADAAI;
 
+template <typename F>
+constexpr F a_k(int k) {
+  return (M_2_PI * (cos(Pi<F> * k) * exp(Pi<F>) - 1)) / (k*k + 1);
+}
+
+long double my_abs(long double x) {
+    return (x > 0) ? x : -x;
+}
+
 int main() {
     for (int k = 0; k < 50; k++) {
-        std::cout << std::setprecision(30) << "Anal: " << a_k<long double>(k) << ", " 
+        std::cout << "k = " << k << ", " << std::setprecision(15) << "Analyst: " << std::setprecision(15)
+        << a_k<long double>(k) << ", " 
         << "Numerical: " << numerical_coefs<long double>(10, k)
-        << ", " << "Diff: " << abs(a_k<long double>(k) - numerical_coefs<long double>(10, k)) 
-        << "  k = " << k <<'\n';
+        << ", " << "Diff: " << my_abs(a_k<long double>(k) - numerical_coefs<long double>(10, k)) 
+        << '\n';
     }
 }
