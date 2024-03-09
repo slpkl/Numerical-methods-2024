@@ -15,7 +15,8 @@ constexpr F numerical_coefs(int N, int k) {
     F T_k = Tn(k, argument);
     result_sum +=  exp_pow_acos * T_k;
   }
-  result_sum *=  2 / (N + 1);
+  result_sum = result_sum / (N+1);
+  result_sum = result_sum * 2;
   return result_sum;
 }
 
