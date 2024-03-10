@@ -23,29 +23,37 @@ enum class WhichD : int { x, y, xx, yy, xy };
 
 const double h = 1e-4;
 
-template <WhichD W, DiffMethod M, typename Collable>
+template <
+    WhichD W = WhichD::xx,
+    DiffMethod M = DiffMethod::stencil3,
+    typename Collable>
 constexpr double Differentiator(const Collable &F, double x, double y) {
   if constexpr (M == DiffMethod::stencil3) {
+    double h_x = my_abs(x) < 1 ? h : h * my_abs(x);
+    double h_y = my_abs(y) < 1 ? h : h * my_abs(x);
     if constexpr (W == WhichD::x) {
-      if (my_abs(x) < 1) {
-        return (F(x + h, y) - F(x - h, y)) / (2 * h);
-      } else {
-        double h_x = h * my_abs(x);
-        return (F(x + h_x, y) - F(x - h_x, y)) / (2 * h_x);
-      }
-      } else if constexpr (W == WhichD::y) {
-      } else if constexpr (W == WhichD::xx) {
-      } else if constexpr (W == WhichD::yy) {
-      } else if constexpr (W == WhichD::xy) {
-      }
+      return (F(x + h, y) - F(x - h, y)) / (2 * h);
+    } else if constexpr (W == WhichD::y) {
+      return (F(x, y + h_x) - F(x, y - h_x)) / (2 * h_x);
+    } else if constexpr (W == WhichD::xx) {
+      return (F(x + h_x, y) - 2 * F(x, y) + F(x - h_x, y)) / (h_x * h_x);
 
-    } else if constexpr (M == DiffMethod::stencil3Extra) {
-    } else if constexpr (M == DiffMethod::stencil5) {
-    } else if constexpr (M == DiffMethod::stencil5Extra) {
-    } else if constexpr (M == DiffMethod::FwdAAD) {
+    } else if constexpr (W == WhichD::yy) {
+      return (F(x, y + h_x) - 2 * F(x, y) + F(x, y - h_x)) / (h_x * h_x);
+
+    } else if constexpr (W == WhichD::xy) {
+      return (1 / (4 * h_x * h_y)) *
+             (F(x + h_x, y + h_y) - F(x - h_x, y - h_y) - F(x + h_x, y - h_y) +
+              F(x - h_x, y - h_y));
     }
+
+  } else if constexpr (M == DiffMethod::stencil3Extra) {
+  } else if constexpr (M == DiffMethod::stencil5) {
+  } else if constexpr (M == DiffMethod::stencil5Extra) {
+  } else if constexpr (M == DiffMethod::FwdAAD) {
+  }
 }
 
-} // namespace ADAAI
+}  // namespace ADAAI
 
 #endif
