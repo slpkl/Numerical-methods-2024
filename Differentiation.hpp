@@ -23,20 +23,22 @@ enum class WhichD : int { x, y, xx, yy, xy };
 
 const double h = 1e-4;
 
+const int n = 2;  // might be 2,3,4 ...
+
 template <WhichD W, DiffMethod M, typename Collable>
 constexpr double Differentiator(const Collable &F, double x, double y) {
   double h_x = my_abs(x) < 1 ? h : h * my_abs(x);
   double h_y = my_abs(y) < 1 ? h : h * my_abs(x);
   if constexpr (M == DiffMethod::stencil3) {
     if constexpr (W == WhichD::x) {
-      return (F(x + h, y) - F(x - h, y)) / (2 * h);
+      return (F(x + h_x, y) - F(x - h_x, y)) / (2 * h_x);
     } else if constexpr (W == WhichD::y) {
-      return (F(x, y + h_x) - F(x, y - h_x)) / (2 * h_x);
+      return (F(x, y + h_y) - F(x, y - h_y)) / (2 * h_y);
     } else if constexpr (W == WhichD::xx) {
       return (F(x + h_x, y) - 2 * F(x, y) + F(x - h_x, y)) / (h_x * h_x);
 
     } else if constexpr (W == WhichD::yy) {
-      return (F(x, y + h_x) - 2 * F(x, y) + F(x, y - h_x)) / (h_x * h_x);
+      return (F(x, y + h_y) - 2 * F(x, y) + F(x, y - h_y)) / (h_y * h_y);
 
     } else if constexpr (W == WhichD::xy) {
       return (1 / (4 * h_x * h_y)) *
@@ -44,6 +46,26 @@ constexpr double Differentiator(const Collable &F, double x, double y) {
               F(x - h_x, y - h_y));
     }
   } else if constexpr (M == DiffMethod::stencil3Extra) {
+    double h_xn = h_x / n;
+    double h_yn = h_y / n;
+    if constexpr (W == WhichD::x) {
+      return (n * n * ((F(x + h_xn, y) - F(x - h_xn, y)) / (2 * h_xn)) -
+              (F(x + h_x, y) - F(x - h_x, y)) / (2 * h_x)) /
+             (n * n - 1);
+    } else if constexpr (W == WhichD::y) {
+      return (n * n * (F(x, y + h_yn) - F(x, y - h_yn)) / (2 * h_yn) -
+              (F(x, y + h_y) - F(x, y - h_y)) / (2 * h_y)) /
+             (n * n - 1);
+    }
+    else if constexpr (W==WhichD::xx){
+        //TODO
+    }
+    else if constexpr (W==WhichD::yy){
+        //TODO
+    }
+    else if constexpr (W==WhichD::xy){
+        //TODO
+    }
   } else if constexpr (M == DiffMethod::stencil5) {
     if constexpr (W == WhichD::x) {
       return (1 / 12) * F(x - 2 * h_x, y) - (2 / 3) * F(x - h_x, y) +
@@ -60,11 +82,15 @@ constexpr double Differentiator(const Collable &F, double x, double y) {
              (5 / 2) * F(x, y) + (4 / 3) * F(x, y + h_y) -
              (1 / 12) * F(x, y + 2 * h_y);
     } else if constexpr (W == WhichD::xy) {
+      // TODO
     }
   }
 
   else if constexpr (M == DiffMethod::stencil5Extra) {
-  } else if constexpr (M == DiffMethod::FwdAAD) {
+    // TODO
+  } 
+  else if constexpr (M == DiffMethod::FwdAAD) {
+    // TODO
   }
 }
 
