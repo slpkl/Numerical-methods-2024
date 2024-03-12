@@ -1,5 +1,6 @@
 #include <iostream>
-#include "diff.hpp"
+#include <string>
+#include "Differentiation.hpp"
 #include <iomanip>
 
 using namespace ADAAI;
@@ -28,11 +29,35 @@ constexpr double F_xy(double x, double y) {
 
 constexpr double my_abs(double x) { return (x > 0) ? x : -x; }
 
+void testing(double x_0, double y_0) {
+
+
+  std::cout << "x_0: " << x_0 << ", " << "y_0: " << y_0 << '\n' << '\n';
+
+  double difference_x =   Differentiator<WhichD::x, DiffMethod::stencil3>(F, x_0, y_0) - F_x(x_0, y_0);
+  double difference_y =   Differentiator<WhichD::y, DiffMethod::stencil3>(F, x_0, y_0) - F_y(x_0, y_0);
+  double difference_xx =   Differentiator<WhichD::xx, DiffMethod::stencil3>(F, x_0, y_0) - F_xx(x_0, y_0);
+  double difference_yy =   Differentiator<WhichD::yy, DiffMethod::stencil3>(F, x_0, y_0) - F_yy(x_0, y_0);
+  double difference_xy =   Differentiator<WhichD::xy, DiffMethod::stencil3>(F, x_0, y_0) - F_xy(x_0, y_0);
+
+  double difference_array[5] = {difference_x, difference_y, difference_xx, difference_yy, difference_xy};
+  std::string diff_string_array[5] = {"DIFF_X | ", "DIFF_Y | ", "DIFF_XX | ", "DIFF_YY | ", "DIFF_XY | "};
+
+  for (int i = 0; i < 5; i++) {
+    std::cout << diff_string_array[i] <<  "Diff: " << std::setprecision(10) << difference_array[i] << '\n'; 
+  }
+
+  std::cout << '\n' << '\n' << '\n';
+
+}
+
 int main(){
-    //TODO: tests for stencil3 x, y, xx, yy, xy (2*5 inputs)
-    double x = 6.0;
-    double y = 7.0;
-    double difference = Differentiator<WhichD::xx, DiffMethod::stencil3>(F,6,7) - F_xx(6,7);
-    std::cout << "x_0: " << x << " " << "y_0: " << y << " " << "diff: " << std::setprecision(15) << difference << "\n";
-    return 0;
+    double testing_values_x[7] = {0.01, 0.7, 1.0, 1.5, 2.5, 3.7, 5.17};
+    double testing_values_y[7] = {0.01, 0.7, 1.0, 1.5, 2.5, 3.7, 5.17};
+
+    for (int i = 0; i < 7; i++) {
+      for (int j  = 0; j < 7; j++) {
+        testing(testing_values_x[i], testing_values_y[j]);
+      }
+    }
 }
