@@ -4,7 +4,8 @@
 #include <cmath>
 #include <type_traits>
 
-namespace ADAAI {
+namespace ADAAI
+{
 
 template <typename F>
 constexpr inline F Log2E;
@@ -56,8 +57,8 @@ template <>
 constexpr inline std::array<float, 7> Polynom<std::array<float, 7>> = {
     0.5, 0.1, 0.008333333333333333333333333333, 0., 0., 0., 0.};
 
-// Utilizing PadeApproximant[Exp[x], {x,0,{6,6}}] approximation method for double
-// data type
+// Utilizing PadeApproximant[Exp[x], {x,0,{6,6}}] approximation method for
+// double data type
 template <>
 constexpr inline std::array<double, 7> Polynom<std::array<double, 7>> = {
     0.5,
@@ -68,12 +69,12 @@ constexpr inline std::array<double, 7> Polynom<std::array<double, 7>> = {
     0.000001503126503126503126503126503126,
     0};
 
-// Utilizing PadeApproximant[Exp[x], {x,0,{7,7}}] approximation method for long-double
-// data type.
+// Utilizing PadeApproximant[Exp[x], {x,0,{7,7}}] approximation method for
+// long-double data type.
 template <>
 constexpr inline std::array<long double, 7>
     Polynom<std::array<long double, 7>> = {
         1 / 2.0l,     3 / 26.0l,     5 / 312.0l,     5 / 3432.0l,
         1 / 11440.0l, 1 / 308880.0l, 1 / 17297280.0l};
 
-}  // namespace ADAAI
+} // namespace ADAAI
