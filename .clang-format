@@ -1,0 +1,10 @@
+IndentWidth: 2
+UseTab: Never
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakTemplateDeclarations: true
+IndentPPDirectives: None
+ObjCBlockIndentWidth: 2
+TabWidth: 2
+BreakBeforeBraces: Allman
+ColumnLimit: 80
