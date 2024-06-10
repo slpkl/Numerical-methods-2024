@@ -1,9 +1,9 @@
+#include "Consts.hpp"
+#include "Exp.hpp"
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <vector>
-#include "Consts.hpp"
-#include "Exp.hpp"
 
 using namespace ADAAI;
 
@@ -11,7 +11,7 @@ const int N = 10;
 const int SET_PRECISION = 15;
 
 template <typename F>
-F my_abs(F a) 
+F my_abs(F a)
 {
   return (a > 0) ? a : (-1) * a;
 }
@@ -21,22 +21,22 @@ int success_count = 0;
 int unsuccess_count = 0;
 
 template <typename F>
-void TestFunction(F x) 
+void TestFunction(F x)
 {
   F IdealExp = std::exp(x);
   F OurExp = Exp(x);
   F ErrorLimit = std::numeric_limits<F>::epsilon() * N;
   F TypeMetric;
-  if (x <= 0) 
+  if (x <= 0)
   {
     TypeMetric = my_abs(IdealExp - OurExp);
-  } 
-  else 
+  }
+  else
   {
     TypeMetric = my_abs((IdealExp / OurExp) - 1.0);
   }
 
-  if (TypeMetric <= ErrorLimit) 
+  if (TypeMetric <= ErrorLimit)
   {
     std::cout << "Test Passed!  "
               << " "
@@ -44,8 +44,8 @@ void TestFunction(F x)
               << "Diff: " << TypeMetric << '\n';
     counter++;
     success_count++;
-  } 
-  else 
+  }
+  else
   {
     std::cout << "Test Failed!  "
               << " "
@@ -58,7 +58,8 @@ void TestFunction(F x)
   }
 }
 
-int main() {
+int main()
+{
   std::vector<float> float_arr = {1.25,  1.5,   1.75,   2.25,    2.5,     2.75,
                                   -1.25, -1.5,  -1.75,  -2.25,   -2.5,    -2.75,
                                   -25.5, -24.5, -23.5,  -20.145, -15.625, 25.5,
@@ -77,15 +78,24 @@ int main() {
       20.1453123l, 15.625543l};
 
   std::cout << "Testing float:\n";
-  for (auto k : float_arr) { TestFunction(k); }
+  for (auto k : float_arr)
+  {
+    TestFunction(k);
+  }
 
   std::cout << "\n\n\n"
             << "Testing double:\n";
-  for (auto k : double_arr) { TestFunction(k); }
+  for (auto k : double_arr)
+  {
+    TestFunction(k);
+  }
 
   std::cout << "\n\n\n"
             << "Testing long double:\n";
-  for (auto k : long_double_arr) { TestFunction(k); }
+  for (auto k : long_double_arr)
+  {
+    TestFunction(k);
+  }
 
   std::cout << "\n\n\n"
             << "Succes: " << success_count << '\n'
