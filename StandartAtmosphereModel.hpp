@@ -4,10 +4,29 @@
 class StandartAtmosphereModel
 {
 private:
-  double h; // height (meters)
-  int l;    //(level: 0,1,2,3)
+  double h = 0; // height (meters)
+  int l = 0;    //(level: 0,1,2,3)
 
-  double ph(double h, int l)
+  // Memorized constants
+
+  double g = 9.80665; // м/с²
+  double R_air = 287.0528;
+
+  // precalculated atmosphere preassures
+  double p_0 = 101325;
+  double p[4] = {0.0, 0.0, 0.0, 0.0};
+
+  // precalculated absolute temperatures
+  double T0 = 288.15;
+  double T[4] = {0.0, 0.0, 0.0, 0.0};
+
+  double r[4] = {6.5 * 1e-3, 0, -1e-3, -2.8 * 1e-3};
+
+  // boundings of the layers
+  double H[5] = {0.0, 11000.0, 20000.0, 32000.0, 47000.0};
+
+  // Compute atmosphere preassure
+  constexpr double ph(double h, int l)
   {
 
     // if (r[l] == 0) {
@@ -20,12 +39,12 @@ private:
     // }
 
     return r[l] == 0 ? p[l] * std::exp(-g * ((h - H[l]) / (T[l] * R_air)))
-                     : p[l] * std::exp((g / (R_air * r[l])) *
-                                  std::log(1 - (r[l] * (h - H[l]) / T[l])));
+                     : p[l] * exp((g / (R_air * r[l])) *
+                                  log(1 - (r[l] * (h - H[l]) / T[l])));
   }
 
   // calculate density on the given height
-  double calculateDensity(double h, int l) 
+  constexpr double calculateDensity(double h, int l)
   {
     double preassure = ph(h, l);
     return preassure / (R_air * (T[l] - r[l] * (h - H[l])));
@@ -33,7 +52,7 @@ private:
   }
 
 public:
-  StandartAtmosphereModel(double height) : h(height)
+  constexpr StandartAtmosphereModel(double height) : h(height)
   {
     determineL(); // determine lavel
 
@@ -52,7 +71,7 @@ public:
     }
   }
 
-  void determineL()
+  constexpr void determineL()
   {
     if (h >= H[0] && h <= H[1])
     {
@@ -76,26 +95,12 @@ public:
     }
   }
 
-  double getPressure() { return ph(h, l); }
+  constexpr double getPressure() { return ph(h, l); }
 
-  double getDensity() { return calculateDensity(h, l); }
+  constexpr double getDensity() { return calculateDensity(h, l); }
 
-  static constexpr double g = 9.80665; // м/с²
-  static constexpr double R_air = 287.0528;
-
-  // Precalculated variables
-  double r[4] = {6.5 * 1e-3, 0, -1e-3, -2.8 * 1e-3};
-
-  double H[5] = {0.0, 11000.0, 20000.0, 32000.0, 47000.0};
-
-  double p_0 = 101325;
-  double p[4];
-
-  double T0 = 288.15;
-  double T[4];
-
-    //Display all calculated variables depending on the given height value
-  void display()
+  // Display all calculated variables depending on the given height value
+  constexpr void display()
   {
     std::cout << "height (h): " << h << " м" << std::endl;
     std::cout << "level (l): " << l << std::endl;
