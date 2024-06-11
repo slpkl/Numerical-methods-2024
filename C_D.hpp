@@ -32,7 +32,8 @@ public:
     CD_table[2.2] = 0.25;
   }
 
-  double compute_CD(double M)
+  // compute Linear interpolation of C_d function
+  constexpr double compute_CD(double M)
   {
     if (M >= 0.5 && M < 0.6)
     {
@@ -108,7 +109,6 @@ public:
     }
     else
     {
-
       return -1.0; // return error value
     }
   }
