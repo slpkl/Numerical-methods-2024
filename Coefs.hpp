@@ -1,9 +1,11 @@
-#include <gsl/gsl_linalg.h>
 #include "Chebyshev.hpp"
+#include <gsl/gsl_linalg.h>
 
-namespace ADAAI {
+namespace ADAAI
+{
 
-void Coefs(int N, gsl_vector *c) {
+void Coefs(int N, gsl_vector *c)
+{
   gsl_matrix *A = gsl_matrix_alloc(N + 1, N + 1);
   gsl_vector *b = gsl_vector_alloc(N + 1);
 
@@ -15,17 +17,26 @@ void Coefs(int N, gsl_vector *c) {
 
   gsl_vector_set(b, N, 1.0l);
 
-  for (int k = 0; k < N; k++) {
+  for (int k = 0; k < N; k++)
+  {
     gsl_matrix_set(A, k, k, -1.0l);
-    for (int n = k + 1; n < N + 1; n++) {
-      if (n % 2 == 0) {
-        if (k % 2 != 0) {
+    for (int n = k + 1; n < N + 1; n++)
+    {
+      if (n % 2 == 0)
+      {
+        if (k % 2 != 0)
+        {
           gsl_matrix_set(A, k, n, static_cast<long double>(2 * n));
         }
-      } else if (n % 2 == 1) {
-        if (k == 0) {
+      }
+      else if (n % 2 == 1)
+      {
+        if (k == 0)
+        {
           gsl_matrix_set(A, k, n, static_cast<long double>(n));
-        } else if (k % 2 == 0) {
+        }
+        else if (k % 2 == 0)
+        {
           gsl_matrix_set(A, k, n, static_cast<long double>(2 * n));
         }
       }
@@ -35,7 +46,8 @@ void Coefs(int N, gsl_vector *c) {
 
   // Add Sum_0 ^N c_n * T_n(0) = 1 equality
 
-  for (int n = 0; n < N + 1; n++) {
+  for (int n = 0; n < N + 1; n++)
+  {
     int data = Tn(n, 0);
     gsl_matrix_set(A, N, n, static_cast<long double>(data));
   }
@@ -55,4 +67,4 @@ void Coefs(int N, gsl_vector *c) {
   return;
 }
 
-}  // namespace ADAAI
+} // namespace ADAAI
